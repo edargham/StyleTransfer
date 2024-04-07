@@ -37,5 +37,7 @@ class StyleContentLoss(losses.Loss):
 
     loss = style_loss + content_loss
 
+    return loss
+
 
 

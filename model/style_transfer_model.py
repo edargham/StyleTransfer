@@ -10,7 +10,6 @@ class StyleContentModel(keras.Model):
     model_backbone: keras.Model, 
     style_layers: list[str], 
     content_layers: list[str],
-    content_image: tf.Tensor,
     *args, 
     **kwargs
   ):
@@ -20,7 +19,6 @@ class StyleContentModel(keras.Model):
     self.content_layers = content_layers
     self.num_style_layers = len(style_layers)
     self.backbone.trainable = False
-    self.image = tf.Variable(content_image)
 
   def call(self, inputs):
     inputs = inputs*255.0
@@ -38,15 +36,20 @@ class StyleContentModel(keras.Model):
     return {'content': content_dict, 'style': style_dict}
   
   @tf.function
-  def clip_0_1(image):
+  def clip_0_1(self, image):
    return tf.clip_by_value(image, clip_value_min=0.0, clip_value_max=1.0)
   
   @tf.function
   def train_step(self, data):
+    input_image, targets = data
     with tf.GradientTape() as tape:
-      outputs = self(data)
-      loss = self.loss(data, outputs)
+      outputs = self(input_image)
+      loss = self.loss(outputs, targets)
     gradients = tape.gradient(loss, self.trainable_variables)
     self.optimizer.apply_gradients(zip(gradients, self.trainable_variables))
-    return loss
+    input_image.assign(self.clip_0_1(input_image))
+    return loss, input_image
+  
+  # def fit(self, data):
+
 
