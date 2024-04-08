@@ -55,19 +55,6 @@ class StyleContentModel(keras.Model):
     input_image.assign(self.clip_0_1(input_image))
     return loss
   
-  # def fit(self, x, y, epochs, steps_per_epoch, callbacks=None):
-  #   history = []
-  #   print()
-  #   print('Training Progress')
-  #   for n in range(epochs):
-  #     pbar = tqdm(range(steps_per_epoch), desc=f'Epoch {n+1}/{epochs}', unit='steps')
-  #     for m in pbar:
-  #       loss = self.train_step((x, y))
-  #       metrics = {'loss': loss.numpy()}
-  #       pbar.set_postfix(metrics)
-  #       history.append(metrics)
-  #     pbar.close()
-  #   return history
   def fit(self, x, y, epochs, steps_per_epoch, callbacks=None):
     if callbacks is None:
       callbacks = []
