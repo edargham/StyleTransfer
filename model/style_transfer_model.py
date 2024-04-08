@@ -45,10 +45,10 @@ class StyleContentModel(keras.Model):
     with tf.GradientTape() as tape:
       outputs = self(input_image)
       loss = self.loss(outputs, targets)
-    gradients = tape.gradient(loss, self.trainable_variables)
-    self.optimizer.apply_gradients(zip(gradients, self.trainable_variables))
+    gradients = tape.gradient(loss, input_image)
+    self.optimizer.apply_gradients([(gradients, input_image)])
     input_image.assign(self.clip_0_1(input_image))
-    return loss, input_image
+    return loss
   
   # def fit(self, data):
 

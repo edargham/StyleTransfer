@@ -21,7 +21,7 @@ if __name__ == '__main__':
   content_layers=['block5_conv3']
 
   style_backbone = utils.get_submodel(vgg, style_layers + content_layers)
-  # style_backbone.summary()
+  style_backbone.summary()
 
   style_image = utils.load_img(config['style_image_path'])
   content_image = utils.load_img(config['content_image_path'])
@@ -30,12 +30,12 @@ if __name__ == '__main__':
   extractor = StyleContentModel(
     model_backbone=style_backbone,
     style_layers=style_layers,
-    content_layers=content_layers
+    content_layers=content_layers,
   )
 
   results = extractor(tf.constant(content_image))
 
-  input_image = tf.Variable(content_image)
+  input_image = tf.Variable(content_image, trainable=True)
 
   print('Styles:')
   for name, output in sorted(results['style'].items()):
@@ -65,14 +65,10 @@ opt = keras.optimizers.Adam(learning_rate=0.02, beta_1=0.99, epsilon=1e-1)
 
 extractor.compile(optimizer=opt, loss=loss_fn)
 
-_, img = extractor.train_step((input_image, results))
-input_image.assign(img)
-_, img = extractor.train_step((input_image, results))
-input_image.assign(img)
-_, img = extractor.train_step((input_image, results))
-input_image.assign(img)
+_ = extractor.train_step((input_image, results))
+_ = extractor.train_step((input_image, results))
+_ = extractor.train_step((input_image, results))
 img_out = utils.tensor_to_image(input_image)
-
 
 import time
 start = time.time()
@@ -84,8 +80,7 @@ step = 0
 for n in range(epochs):
   for m in range(steps_per_epoch):
     step += 1
-    _, img = extractor.train_step((input_image, results))
-    input_image.assign(img)
+    _ = extractor.train_step((input_image, results))
     print(".", end='', flush=True)
   # display.clear_output(wait=True)
   # display.display(tensor_to_image(image))
@@ -94,5 +89,5 @@ for n in range(epochs):
 end = time.time()
 print("Total time: {:.1f}".format(end-start))
 
-img_out.save('./out2.png', 'PNG')
+img_out.save('./out.png', 'PNG')
 
