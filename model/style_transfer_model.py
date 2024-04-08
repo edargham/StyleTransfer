@@ -83,7 +83,7 @@ class StyleContentModel(keras.Model):
       
       pbar.close()
       
-      callbacks.on_epoch_end(n, logs=metrics)  # Pass metrics to `logs` for the callbacks to use
+      callbacks.on_epoch_end(n, logs=metrics) 
     
     callbacks.on_train_end()
     return history
