@@ -60,8 +60,7 @@ def get_submodel(vgg: tf.keras.Model, layer_names: list[str]) -> tf.keras.Model:
   model = tf.keras.Model([vgg.input], outputs)
   return model
 
-@tf.function
-def gram_matrix(input_tensor):
+def gram_matrix(input_tensor: tf.Tensor) -> tf.Tensor:
   result = tf.linalg.einsum('bijc,bijd->bcd', input_tensor, input_tensor)
   input_shape = tf.shape(input_tensor)
   num_locations = tf.cast(input_shape[1]*input_shape[2], tf.float32)
