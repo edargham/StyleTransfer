@@ -55,6 +55,11 @@ def load_vgg_19() -> tf.keras.Model:
   vgg.trainable = False
   return vgg
 
+def load_mobilenet_v2() -> tf.keras.Model:
+    mobilenet = tf.keras.applications.MobileNetV2(include_top=False, weights='imagenet')
+    mobilenet.trainable = False
+    return mobilenet
+
 def get_submodel(vgg: tf.keras.Model, layer_names: list[str]) -> tf.keras.Model:
   outputs = [vgg.get_layer(name).output for name in layer_names]
   model = tf.keras.Model([vgg.input], outputs)
