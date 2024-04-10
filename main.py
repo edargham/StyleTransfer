@@ -17,7 +17,9 @@ if __name__ == '__main__':
     'block5_conv3'
   ]
 
-  content_layers=['block5_conv4']
+  content_layers=[
+    'block1_conv1'
+  ]
 
   style_backbone = utils.get_submodel(vgg, style_layers + content_layers)
   style_backbone.summary()
