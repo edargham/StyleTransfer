@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
         # Set the number of style and content layers you want to use randomly
         num_style_layers = random.randint(5,10)
-        num_content_layers = random.randint(2,5)
+        num_content_layers = 1
 
         # Randomly select style layers
         style_layers = random.sample(all_mobilenet_layers, num_style_layers)
@@ -71,9 +71,11 @@ if __name__ == '__main__':
             print('      max: ', output.numpy().max())
             print('      mean: ', output.numpy().mean())
 
+        style_wgt = random.choice(config['style_weight'])
+        content_wgt = random.choice(config['content_weight'])
         loss_fn = StyleContentLoss(
-            style_weight=config['style_weight'],
-            content_weight=config['content_weight'],
+            style_weight=style_wgt,
+            content_weight=content_wgt,
             num_style_layers=len(style_layers),
             num_content_layers=len(content_layers)
         )
@@ -106,6 +108,10 @@ if __name__ == '__main__':
             f.write('\n'.join(style_layers))
             f.write('\n\nContent Layers:\n')
             f.write('\n'.join(content_layers))
+            f.write('\n\nContent Weight:\n')
+            f.write('\n' + str(content_wgt))
+            f.write('\n\nStyle Weight:\n')
+            f.write('\n' + str(style_wgt))
 
         print('Saving image...')
         img_out = utils.tensor_to_image(input_image)
