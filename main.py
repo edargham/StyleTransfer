@@ -2,13 +2,16 @@ import utils
 from config import config
 import tensorflow as tf
 import keras
-import numpy as np
+from keras.preprocessing.image import ImageDataGenerator
 
 from model.style_transfer_model import StyleContentModel
 from losses.style_content_loss import StyleContentLoss
+from model.backbone_v2 import build_backbone_v2
 
 if __name__ == '__main__':
-  vgg = utils.load_vgg_19()
+  vgg = build_backbone_v2(num_classes=100)
+  vgg.load_weights('best_backbone.h5')
+  vgg.summary()
 
   style_layers = [
     'block1_conv2',
@@ -38,9 +41,8 @@ if __name__ == '__main__':
   results = extractor(tf.constant(content_image))
   style_targets = extractor(style_image)['style']
   content_targets = extractor(content_image)['content']
-  
-  generated = np.random.rand(1, 288, 512, 3)
-  input_image = tf.Variable(generated, trainable=True, dtype=tf.float32)
+
+  input_image = tf.Variable(content_image, trainable=True)
 
   print('Useful information for generating Gram Matrix:')
   print('  Styles:')

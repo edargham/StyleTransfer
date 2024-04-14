@@ -13,10 +13,11 @@ def tensor_to_image(tensor: tf.Tensor) -> PIL.Image.Image:
   return PIL.Image.fromarray(tensor)
 
 def load_img(path_to_img: str) -> tf.Tensor:
-  max_dim = 512
+  max_dim = 32
   img = tf.io.read_file(path_to_img)
   img = tf.image.decode_image(img, channels=3)
   img = tf.image.convert_image_dtype(img, tf.float32)
+  img = tf.image.resize(img, (max_dim, max_dim))
 
   shape = tf.cast(tf.shape(img)[:-1], tf.float32)
   long_dim = max(shape)
