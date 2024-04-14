@@ -2,47 +2,47 @@ import utils
 from config import config
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras.applications import ResNet50
+from keras.applications import ResNet50
+import numpy as np
 
 from model.style_transfer_model import StyleContentModel
 from losses.style_content_loss import StyleContentLoss
 
 if __name__ == '__main__':
-    # Load the ResNet50 model pre-trained on ImageNet data
-    resnet = ResNet50(include_top=False, weights='imagenet')
+  # Load the ResNet50 model pre-trained on ImageNet data
+  resnet = ResNet50(include_top=False, weights='imagenet')
 
-    # Define style and content layers
-    style_layers = [
-        'conv1_conv',  # Corresponds to block1_conv1 in VGG19
-        # Add more layers as per the ResNet architecture
-    ]
+  # Define style and content layers
+  style_layers = [
+    'conv1_conv',  # Corresponds to block1_conv1 in VGG19
+    # Add more layers as per the ResNet architecture
+  ]
 
-    content_layers = ['conv5_block3_out']  # Corresponds to block5_conv3 in VGG19
+  content_layers = ['conv5_block3_out']  # Corresponds to block5_conv3 in VGG19
 
-    # Get the submodel from ResNet50
-    style_backbone = utils.get_submodel(resnet, style_layers + content_layers)
-    style_backbone.summary()
+  # Get the submodel from ResNet50
+  style_backbone = utils.get_submodel(resnet, style_layers + content_layers)
+  style_backbone.summary()
 
-    # Load style and content images
-    style_image = utils.load_img(config['style_image_path'])
-    content_image = utils.load_img(config['content_image_path'])
+  # Load style and content images
+  style_image = utils.load_img(config['style_image_path'])
+  content_image = utils.load_img(config['content_image_path'])
 
-    # Create the style content model
-    extractor = StyleContentModel(
-        model_backbone=style_backbone,
-        style_layers=style_layers,
-        content_layers=content_layers,
-        total_variation_weight=config['total_variation_weight'],
-    )
+  # Create the style content model
+  extractor = StyleContentModel(
+      model_backbone=style_backbone,
+      style_layers=style_layers,
+      content_layers=content_layers,
+      total_variation_weight=config['total_variation_weight'],
+  )
 
-    # Rest of the code remains the same...
-
-
+  # Rest of the code remains the same...
   results = extractor(tf.constant(content_image))
   style_targets = extractor(style_image)['style']
   content_targets = extractor(content_image)['content']
 
-  input_image = tf.Variable(content_image, trainable=True)
+  generated = np.random.rand(1, 288, 512, 3)
+  input_image = tf.Variable(generated, trainable=True, dtype=tf.float32)
 
   print('Useful information for generating Gram Matrix:')
   print('  Styles:')
