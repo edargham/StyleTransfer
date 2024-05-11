@@ -18,20 +18,16 @@ if __name__ == '__main__':
   vgg.summary()
 
   style_layers = [
-    # 'block1_conv2',
-    # 'block1_residual_conv',
+    'block1_conv1',
+    'block1_conv2',
     # 'block2_conv2',
-    # 'block2_residual_conv',
-    'block3_conv3',
-    # 'block3_residual_conv',
+    # 'block3_conv3',
     # 'block4_conv3',
-    # 'block4_residual_conv',
     # 'block5_conv3',
-    # 'block5_residual_conv'
   ]
 
   content_layers=[
-    'block1_conv1'
+    'block1_conv2'
   ]
 
   style_backbone = utils.get_submodel(vgg, style_layers + content_layers)
