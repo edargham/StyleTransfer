@@ -2,23 +2,32 @@ import utils
 from config import config
 import tensorflow as tf
 import keras
+import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
 
 from model.style_transfer_model import StyleContentModel
 from losses.style_content_loss import StyleContentLoss
-from model.backbone_v2 import build_backbone_v2
+from model.backbone_autoenc import build_backbone_v2
 
 if __name__ == '__main__':
   vgg = build_backbone_v2(num_classes=100)
+  # keep only the layers upto max_pooling2d_4
   vgg.load_weights('best_backbone.h5')
+  vgg = keras.Model(inputs=vgg.input, outputs=vgg.get_layer('max_pooling2d_4').output)
+  vgg.trainable = False
   vgg.summary()
 
   style_layers = [
-    'block1_conv2',
-    'block2_conv2',
+    # 'block1_conv2',
+    # 'block1_residual_conv',
+    # 'block2_conv2',
+    # 'block2_residual_conv',
     'block3_conv3',
-    'block4_conv3',
-    'block5_conv3'
+    # 'block3_residual_conv',
+    # 'block4_conv3',
+    # 'block4_residual_conv',
+    # 'block5_conv3',
+    # 'block5_residual_conv'
   ]
 
   content_layers=[
@@ -42,7 +51,9 @@ if __name__ == '__main__':
   style_targets = extractor(style_image)['style']
   content_targets = extractor(content_image)['content']
 
-  input_image = tf.Variable(content_image, trainable=True)
+  generated = np.random.rand(1, 224, 224, 3)
+  input_image = tf.Variable(generated, trainable=True, dtype=tf.float32)
+
 
   print('Useful information for generating Gram Matrix:')
   print('  Styles:')
