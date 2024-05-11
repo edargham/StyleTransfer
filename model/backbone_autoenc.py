@@ -254,7 +254,14 @@ def build_backbone_v2(num_classes: int, input_shape=(224, 224, 3)):
     )
     adder_10 = layers.Add()
 
-
+    conv_out = layers.Conv2DTranspose(
+      fulters=3,
+      kernel_size=(1, 1),
+      strides=(1, 1),
+      padding='same',
+      activation=None,
+      name='output_conv'
+    )
 
     x1 = inputs
     for l in conv_block_1:
@@ -322,4 +329,6 @@ def build_backbone_v2(num_classes: int, input_shape=(224, 224, 3)):
     res10 = residual_conv_10(up_sampling_5(x9))
     x10 = adder_10([x10, res10])
 
-    return Model(inputs=inputs, outputs=[x10])
+    x = conv_out(x10)
+
+    return Model(inputs=inputs, outputs=[x])
