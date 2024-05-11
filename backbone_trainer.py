@@ -1,13 +1,9 @@
-import keras.metrics
-import keras.optimizers
-import keras.optimizers.schedules
-import keras.optimizers.schedules.learning_rate_schedule
 import tensorflow as tf
 import tensorflow_datasets as tfds
 import keras
 from keras.preprocessing.image import ImageDataGenerator
 
-from model.backbone_v2 import build_backbone_v2
+from model.backbone_autoenc import build_backbone_v2
 
 
 if __name__ == '__main__':
@@ -43,33 +39,42 @@ if __name__ == '__main__':
     shear_range=0.2, 
     fill_mode='nearest',
     horizontal_flip=True,
-    vertical_flip=True
+    vertical_flip=True,
+    validation_split=0.1
   )
 
-  val_datagen = ImageDataGenerator(
-    rescale=1./255,
+  train_set = train_datagen.flow_from_directory(
+    directory='../test',
+    target_size=(224, 224),
+    color_mode='rgb',
+    class_mode='input',
+    shuffle=True,
+    batch_size=32,
+    subset='training'
   )
 
-  train_set = train_datagen.flow(x_train, y_train, batch_size=32, shuffle=True)
-  val_set = val_datagen.flow(x_val, y_val, batch_size=32)
+  val_set = train_datagen.flow_from_directory(
+    directory='../test',
+    target_size=(224, 224),
+    class_mode='input',
+    shuffle=False,
+    batch_size=32,
+    subset='validation'
+  )
 
   backbone = build_backbone_v2(num_classes=100)
 
-  learning_rate_sched = keras.optimizers.schedules.learning_rate_schedule.ExponentialDecay(
+  learning_rate_sched = keras.optimizers.schedules.ExponentialDecay(
     initial_learning_rate=1e-3,
     decay_steps=len(train_set),
     decay_rate=0.98,
     staircase=True
   )
 
-  loss_fn = keras.losses.CategoricalCrossentropy()
+  loss_fn = keras.losses.MeanSquaredError()
   optimizer = keras.optimizers.Adam(learning_rate=learning_rate_sched)
 
-  backbone.compile(optimizer=optimizer, loss=loss_fn, metrics=[
-    keras.metrics.CategoricalAccuracy(), 
-    keras.metrics.Precision(), 
-    keras.metrics.Recall()
-  ])
+  backbone.compile(optimizer=optimizer, loss=loss_fn)
 
   backbone.summary()
   tf.keras.utils.plot_model(backbone, to_file='backbone_v2.png', show_shapes=True, show_layer_names=True)
