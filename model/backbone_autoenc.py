@@ -255,7 +255,7 @@ def build_backbone_v2(num_classes: int, input_shape=(224, 224, 3)):
     adder_10 = layers.Add()
 
     conv_out = layers.Conv2DTranspose(
-      fulters=3,
+      filters=3,
       kernel_size=(1, 1),
       strides=(1, 1),
       padding='same',
