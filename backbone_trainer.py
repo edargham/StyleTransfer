@@ -35,7 +35,7 @@ if __name__ == '__main__':
     color_mode='rgb',
     class_mode='input',
     shuffle=True,
-    batch_size=32,
+    batch_size=128,
     subset='training'
   )
 
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     target_size=(224, 224),
     class_mode='input',
     shuffle=False,
-    batch_size=32,
+    batch_size=128,
     subset='validation'
   )
 
