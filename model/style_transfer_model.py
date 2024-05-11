@@ -26,7 +26,6 @@ class StyleContentModel(keras.Model):
 
   def call(self, inputs):
     inputs = inputs*255.0
-    # preprocessed_input = tf.keras.applications.vgg19.preprocess_input(inputs)
     backbone_out = self.backbone(inputs)
 
     style_outputs = backbone_out[:self.num_style_layers]

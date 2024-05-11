@@ -1,9 +1,8 @@
 import tensorflow as tf
-import tensorflow_datasets as tfds
 import keras
 from keras.preprocessing.image import ImageDataGenerator
 
-from model.backbone_autoenc import build_backbone_v2
+from model.backbone_autoenc import build_backbone
 
 
 if __name__ == '__main__':
@@ -23,21 +22,8 @@ if __name__ == '__main__':
 
   callbacks = [model_checkpoint]
 
-  train, val = tf.keras.datasets.cifar100.load_data()
-  x_train, y_train = train
-  x_val, y_val = val
-
-  y_train = keras.utils.to_categorical(y_train, 100)
-  y_val = keras.utils.to_categorical(y_val, 100)
-
   train_datagen = ImageDataGenerator(
-    rescale=1./255,  
-    rotation_range=20, 
-    width_shift_range=0.2,  
-    height_shift_range=0.2,
-    zoom_range=0.2,  
-    shear_range=0.2, 
-    fill_mode='nearest',
+    rescale=1./255.0,  
     horizontal_flip=True,
     vertical_flip=True,
     validation_split=0.1
@@ -62,12 +48,12 @@ if __name__ == '__main__':
     subset='validation'
   )
 
-  backbone = build_backbone_v2(num_classes=100)
+  backbone = build_backbone(num_classes=100)
 
   learning_rate_sched = keras.optimizers.schedules.ExponentialDecay(
     initial_learning_rate=1e-3,
     decay_steps=len(train_set),
-    decay_rate=0.98,
+    decay_rate=0.9,
     staircase=True
   )
 
@@ -77,7 +63,7 @@ if __name__ == '__main__':
   backbone.compile(optimizer=optimizer, loss=loss_fn)
 
   backbone.summary()
-  tf.keras.utils.plot_model(backbone, to_file='backbone_v2.png', show_shapes=True, show_layer_names=True)
+  tf.keras.utils.plot_model(backbone, to_file='backbone.png', show_shapes=True, show_layer_names=True)
 
   backbone.fit(
     train_set,

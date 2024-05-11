@@ -1,7 +1,7 @@
 import tensorflow as tf
 from keras import layers, Model
 
-def build_backbone_v2(num_classes: int, input_shape=(224, 224, 3)):
+def build_backbone(num_classes: int, input_shape=(224, 224, 3)):
     inputs = layers.Input(shape=input_shape)
     conv_block_1 = [
       layers.Conv2D(
@@ -137,7 +137,9 @@ def build_backbone_v2(num_classes: int, input_shape=(224, 224, 3)):
         strides=(1, 1), 
         padding='same',
         activation=None,
-        name=f'block6_conv{i+1}' 
+        name=f'block6_conv{i+1}',
+        kernel_initializer='he_normal',
+        bias_initializer='zeros'
       ) for i in range(4)
     ] + [
       layers.BatchNormalization(),
@@ -150,7 +152,9 @@ def build_backbone_v2(num_classes: int, input_shape=(224, 224, 3)):
       strides=(1, 1), 
       padding='same',
       activation=None,
-      name=f'block6_residual_conv'
+      name=f'block6_residual_conv',
+      kernel_initializer='he_normal',
+      bias_initializer='zeros'
     )
     adder_6 = layers.Add()
 
@@ -162,7 +166,9 @@ def build_backbone_v2(num_classes: int, input_shape=(224, 224, 3)):
         strides=(1, 1), 
         padding='same',
         activation=None,
-        name=f'block7_conv{i+1}' 
+        name=f'block7_conv{i+1}',
+        kernel_initializer='he_normal',
+        bias_initializer='zeros'
       ) for i in range(4)
     ] + [
       layers.BatchNormalization(),
@@ -175,7 +181,9 @@ def build_backbone_v2(num_classes: int, input_shape=(224, 224, 3)):
       strides=(1, 1), 
       padding='same',
       activation=None,
-      name=f'block7_residual_conv'
+      name=f'block7_residual_conv',
+      kernel_initializer='he_normal',
+      bias_initializer='zeros'
     )
     adder_7 = layers.Add()
 
@@ -187,7 +195,9 @@ def build_backbone_v2(num_classes: int, input_shape=(224, 224, 3)):
         strides=(1, 1), 
         padding='same',
         activation=None,
-        name=f'block8_conv{i+1}' 
+        name=f'block8_conv{i+1}',
+        kernel_initializer='he_normal',
+        bias_initializer='zeros'
       ) for i in range(4)
     ] + [
       layers.BatchNormalization(),
@@ -200,7 +210,9 @@ def build_backbone_v2(num_classes: int, input_shape=(224, 224, 3)):
       strides=(1, 1), 
       padding='same',
       activation=None,
-      name=f'block8_residual_conv'
+      name=f'block8_residual_conv',
+      kernel_initializer='he_normal',
+      bias_initializer='zeros'
     )
     adder_8 = layers.Add()
 
@@ -212,7 +224,9 @@ def build_backbone_v2(num_classes: int, input_shape=(224, 224, 3)):
         strides=(1, 1), 
         padding='same',
         activation=None,
-        name=f'block9_conv{i+1}' 
+        name=f'block9_conv{i+1}',
+        kernel_initializer='he_normal',
+        bias_initializer='zeros'         
       ) for i in range(2)
     ] + [
       layers.BatchNormalization(),
