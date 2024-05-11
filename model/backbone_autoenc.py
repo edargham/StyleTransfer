@@ -1,7 +1,7 @@
 import tensorflow as tf
 from keras import layers, Model
 
-def build_backbone_v2(num_classes: int, input_shape=(32, 32, 3)):
+def build_backbone_v2(num_classes: int, input_shape=(224, 224, 3)):
     inputs = layers.Input(shape=input_shape)
     conv_block_1 = [
       layers.Conv2D(
@@ -131,7 +131,7 @@ def build_backbone_v2(num_classes: int, input_shape=(32, 32, 3)):
     # Start of the decoder part
     up_sampling_1 = layers.UpSampling2D(size=(2, 2))
     conv_block_6 = [
-      layers.Conv2D(
+      layers.Conv2DTranspose(
         filters=512, 
         kernel_size=(3, 3), 
         strides=(1, 1), 
@@ -144,7 +144,7 @@ def build_backbone_v2(num_classes: int, input_shape=(32, 32, 3)):
       layers.LeakyReLU()
     ]
 
-    residual_conv_6 = layers.Conv2D(      
+    residual_conv_6 = layers.Conv2DTranspose(      
       filters=512, 
       kernel_size=(1, 1), 
       strides=(1, 1), 
@@ -156,7 +156,7 @@ def build_backbone_v2(num_classes: int, input_shape=(32, 32, 3)):
 
     up_sampling_2 = layers.UpSampling2D(size=(2, 2))
     conv_block_7 = [
-      layers.Conv2D(
+      layers.Conv2DTranspose(
         filters=512, 
         kernel_size=(3, 3), 
         strides=(1, 1), 
@@ -169,7 +169,7 @@ def build_backbone_v2(num_classes: int, input_shape=(32, 32, 3)):
       layers.LeakyReLU()
     ]
 
-    residual_conv_7 = layers.Conv2D(      
+    residual_conv_7 = layers.Conv2DTranspose(      
       filters=512, 
       kernel_size=(1, 1), 
       strides=(1, 1), 
@@ -181,7 +181,7 @@ def build_backbone_v2(num_classes: int, input_shape=(32, 32, 3)):
 
     up_sampling_3 = layers.UpSampling2D(size=(2, 2))
     conv_block_8 = [
-      layers.Conv2D(
+      layers.Conv2DTranspose(
         filters=256, 
         kernel_size=(3, 3), 
         strides=(1, 1), 
@@ -194,7 +194,7 @@ def build_backbone_v2(num_classes: int, input_shape=(32, 32, 3)):
       layers.LeakyReLU()
     ]
 
-    residual_conv_8 = layers.Conv2D(      
+    residual_conv_8 = layers.Conv2DTranspose(      
       filters=256, 
       kernel_size=(1, 1), 
       strides=(1, 1), 
@@ -206,7 +206,7 @@ def build_backbone_v2(num_classes: int, input_shape=(32, 32, 3)):
 
     up_sampling_4 = layers.UpSampling2D(size=(2, 2))
     conv_block_9 = [
-      layers.Conv2D(
+      layers.Conv2DTranspose(
         filters=128, 
         kernel_size=(3, 3), 
         strides=(1, 1), 
@@ -219,7 +219,7 @@ def build_backbone_v2(num_classes: int, input_shape=(32, 32, 3)):
       layers.LeakyReLU()
     ]
 
-    residual_conv_9 = layers.Conv2D(      
+    residual_conv_9 = layers.Conv2DTranspose(      
       filters=128, 
       kernel_size=(1, 1), 
       strides=(1, 1), 
@@ -231,7 +231,7 @@ def build_backbone_v2(num_classes: int, input_shape=(32, 32, 3)):
 
     up_sampling_5 = layers.UpSampling2D(size=(2, 2))
     conv_block_10 = [
-      layers.Conv2D(
+      layers.Conv2DTranspose(
         filters=64, 
         kernel_size=(3, 3), 
         strides=(1, 1), 
@@ -244,7 +244,7 @@ def build_backbone_v2(num_classes: int, input_shape=(32, 32, 3)):
       layers.LeakyReLU()
     ]
 
-    residual_conv_10 = layers.Conv2D(      
+    residual_conv_10 = layers.Conv2DTranspose(      
       filters=64, 
       kernel_size=(1, 1), 
       strides=(1, 1), 
@@ -292,39 +292,34 @@ def build_backbone_v2(num_classes: int, input_shape=(32, 32, 3)):
     x5 = max_pool_5(x5)
 
     # Start of the decoder part
-    x6 = x5
+    x6 = up_sampling_1(x5)
     for l in conv_block_6:
       x6 = l(x6)
     res6 = residual_conv_6(x5)
     x6 = adder_6([x6, res6])
-    x6 = up_sampling_1(x6)
 
-    x7 = x6
+    x7 = up_sampling_2(x6)
     for l in conv_block_7:
       x7 = l(x7)
     res7 = residual_conv_7(x6)
     x7 = adder_7([x7, res7])
-    x7 = up_sampling_2(x7)
 
-    x8 = x7
+    x8 = up_sampling_3(x7)
     for l in conv_block_8:
       x8 = l(x8)
     res8 = residual_conv_8(x7)
     x8 = adder_8([x8, res8])
-    x8 = up_sampling_3(x6)
 
-    x9 = x8
+    x9 = up_sampling_4(x8)
     for l in conv_block_9:
       x9 = l(x9)
     res9 = residual_conv_9(x8)
     x9 = adder_9([x9, res9])
-    x9 = up_sampling_4(x9)
 
-    x10 = x9
+    x10 = up_sampling_5(x9)
     for l in conv_block_10:
       x10 = l(x10)
     res10 = residual_conv_10(x9)
     x10 = adder_10([x10, res10])
-    x10 = up_sampling_5(x10)
 
-    return Model(inputs, x10)
+    return Model(inputs=inputs, outputs=[x10])
