@@ -81,7 +81,7 @@ if __name__ == '__main__':
 
   backbone.fit(
     train_set,
-    epochs=500,
+    epochs=5,
     validation_data=val_set,
     callbacks=callbacks
   )
