@@ -3,3 +3,4 @@ model/__pycache__
 losses/__pycache__
 *.h5
 backbone.png
+logs

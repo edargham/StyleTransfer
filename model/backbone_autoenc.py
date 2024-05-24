@@ -1,7 +1,7 @@
 import tensorflow as tf
 from keras import layers, Model
 
-def build_backbone(num_classes: int, input_shape=(224, 224, 3)):
+def build_backbone(input_shape=(224, 224, 3)):
     inputs = layers.Input(shape=input_shape)
     conv_block_1 = [
       layers.Conv2D(

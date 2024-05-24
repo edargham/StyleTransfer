@@ -24,8 +24,6 @@ if __name__ == '__main__':
 
   train_datagen = ImageDataGenerator(
     rescale=1./255.0,  
-    horizontal_flip=True,
-    vertical_flip=True,
     validation_split=0.1
   )
 
@@ -48,7 +46,7 @@ if __name__ == '__main__':
     subset='validation'
   )
 
-  backbone = build_backbone(num_classes=100)
+  backbone = build_backbone()
 
   learning_rate_sched = keras.optimizers.schedules.ExponentialDecay(
     initial_learning_rate=1e-3,
