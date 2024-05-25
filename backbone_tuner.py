@@ -37,7 +37,7 @@ if __name__ == '__main__':
     color_mode='rgb',
     class_mode='input',
     shuffle=True,
-    batch_size=128,
+    batch_size=96,
     subset='training'
   )
 
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     target_size=(224, 224),
     class_mode='input',
     shuffle=False,
-    batch_size=128,
+    batch_size=96,
     subset='validation'
   )
 
@@ -83,9 +83,8 @@ if __name__ == '__main__':
   tuner.search(
     x=train_set,
     validation_data=val_set,
-    epochs=5,
-    callbacks=[tensorboard_callback],
-        callbacks=[
+    epochs=1,
+    callbacks=[
       tensorboard_callback,
       model_checkpoint
     ]
