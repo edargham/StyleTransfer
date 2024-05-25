@@ -7,7 +7,7 @@ from model.backbone_autoenc import build_backbone
 
 
 if __name__ == '__main__':
-  logdir = './logs'
+  logdir = './logs/tuning'
   tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir, histogram_freq=1)
 
   model_checkpoint = keras.callbacks.ModelCheckpoint(
@@ -16,12 +16,6 @@ if __name__ == '__main__':
     mode='min',
     save_weights_only=False,
     save_best_only=False
-  )
-
-  early_stopping = keras.callbacks.EarlyStopping(
-    monitor='val_loss',
-    mode='min',
-    patience=5
   )
 
   callbacks = [model_checkpoint]
