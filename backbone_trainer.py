@@ -6,6 +6,9 @@ from model.backbone_autoenc import build_backbone
 
 
 if __name__ == '__main__':
+  logdir = './logs/fit'
+  tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir, histogram_freq=1)
+  
   model_checkpoint = keras.callbacks.ModelCheckpoint(
     filepath='best_backbone.h5',
     monitor='val_loss',
@@ -14,13 +17,7 @@ if __name__ == '__main__':
     save_best_only=False
   )
 
-  early_stopping = keras.callbacks.EarlyStopping(
-    monitor='val_loss',
-    mode='min',
-    patience=5
-  )
-
-  callbacks = [model_checkpoint]
+  callbacks = [model_checkpoint, tensorboard_callback]
 
   train_datagen = ImageDataGenerator(
     rescale=1./255.0,  
