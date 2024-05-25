@@ -49,7 +49,7 @@ if __name__ == '__main__':
   backbone = build_backbone()
 
   learning_rate_sched = keras.optimizers.schedules.ExponentialDecay(
-    initial_learning_rate=1e-3,
+    initial_learning_rate=0.00023221,
     decay_steps=len(train_set),
     decay_rate=0.9,
     staircase=True
