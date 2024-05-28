@@ -9,12 +9,13 @@ def build_backbone(input_shape=(224, 224, 3)):
         kernel_size=(3, 3), 
         strides=(1, 1), 
         padding='same',
-        activation=None,
+        activation='relu',
+        kernel_initializer='glorot_uniform'
         name=f'block1_conv{i+1}' 
       ) for i in range(2)
     ] + [
       layers.BatchNormalization(),
-      layers.LeakyReLU()
+      #layers.ReLU()
     ]
     
     residual_conv_1 = layers.Conv2D(      
@@ -23,6 +24,7 @@ def build_backbone(input_shape=(224, 224, 3)):
       strides=(1, 1), 
       padding='same',
       activation=None,
+      kernel_initializer='glorot_uniform'
       name=f'block1_residual_conv'
     )
     adder_1 = layers.Add()
@@ -34,12 +36,13 @@ def build_backbone(input_shape=(224, 224, 3)):
         kernel_size=(3, 3), 
         strides=(1, 1), 
         padding='same',
-        activation=None,
+        activation='relu',
+        kernel_initializer='glorot_uniform'
         name=f'block2_conv{i+1}' 
       ) for i in range(2)
     ] + [
       layers.BatchNormalization(),
-      layers.LeakyReLU()
+      #layers.ReLU()
     ]
     
     residual_conv_2 = layers.Conv2D(      
@@ -48,6 +51,7 @@ def build_backbone(input_shape=(224, 224, 3)):
       strides=(1, 1), 
       padding='same',
       activation=None,
+      kernel_initializer='glorot_uniform'
       name=f'block2_residual_conv'
     )
     adder_2 = layers.Add()
@@ -59,12 +63,13 @@ def build_backbone(input_shape=(224, 224, 3)):
         kernel_size=(3, 3), 
         strides=(1, 1), 
         padding='same',
-        activation=None,
+        activation='relu',
+        kernel_initializer='glorot_uniform'
         name=f'block3_conv{i+1}' 
       ) for i in range(4)
     ] + [
       layers.BatchNormalization(),
-      layers.LeakyReLU()
+      #layers.ReLU()
     ]
     
     residual_conv_3 = layers.Conv2D(      
@@ -84,12 +89,13 @@ def build_backbone(input_shape=(224, 224, 3)):
         kernel_size=(3, 3), 
         strides=(1, 1), 
         padding='same',
-        activation=None,
+        activation='relu',
+        kernel_initializer='glorot_uniform',
         name=f'block4_conv{i+1}' 
       ) for i in range(4)
     ] + [
       layers.BatchNormalization(),
-      layers.LeakyReLU()
+      #layers.LeakyReLU()
     ]
     
     residual_conv_4 = layers.Conv2D(      
@@ -98,7 +104,8 @@ def build_backbone(input_shape=(224, 224, 3)):
       strides=(1, 1), 
       padding='same',
       activation=None,
-      name=f'block4_residual_conv'
+      name=f'block4_residual_conv',
+      kernel_initializer='glorot_uniform'
     )
     adder_4 = layers.Add()
     max_pool_4 = layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2))
@@ -109,12 +116,13 @@ def build_backbone(input_shape=(224, 224, 3)):
         kernel_size=(3, 3), 
         strides=(1, 1), 
         padding='same',
-        activation=None,
+        activation='relu',
+        kernel_initializer='glorot_uniform',
         name=f'block5_conv{i+1}' 
       ) for i in range(4)
     ] + [
       layers.BatchNormalization(),
-      layers.LeakyReLU()
+      #layers.LeakyReLU()
     ]
     
     residual_conv_5 = layers.Conv2D(      
@@ -123,7 +131,8 @@ def build_backbone(input_shape=(224, 224, 3)):
       strides=(1, 1), 
       padding='same',
       activation=None,
-      name=f'block5_residual_conv'
+      name=f'block5_residual_conv',
+      kernel_initializer='glorot_uniform'
     )
     adder_5 = layers.Add()
     max_pool_5 = layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2))
@@ -136,14 +145,13 @@ def build_backbone(input_shape=(224, 224, 3)):
         kernel_size=(3, 3), 
         strides=(1, 1), 
         padding='same',
-        activation=None,
-        name=f'block6_conv{i+1}',
-        kernel_initializer='he_normal',
-        bias_initializer='zeros'
+        activation='relu',
+        kernel_initializer='glorot_uniform',
+        name=f'block6_conv{i+1}'
       ) for i in range(4)
     ] + [
       layers.BatchNormalization(),
-      layers.LeakyReLU()
+      #layers.LeakyReLU()
     ]
 
     residual_conv_6 = layers.Conv2DTranspose(      
@@ -151,10 +159,8 @@ def build_backbone(input_shape=(224, 224, 3)):
       kernel_size=(1, 1), 
       strides=(1, 1), 
       padding='same',
-      activation=None,
+      kernel_initializer='glorot_uniform',
       name=f'block6_residual_conv',
-      kernel_initializer='he_normal',
-      bias_initializer='zeros'
     )
     adder_6 = layers.Add()
 
@@ -165,14 +171,13 @@ def build_backbone(input_shape=(224, 224, 3)):
         kernel_size=(3, 3), 
         strides=(1, 1), 
         padding='same',
-        activation=None,
+        activation='relu',
         name=f'block7_conv{i+1}',
-        kernel_initializer='he_normal',
-        bias_initializer='zeros'
+        kernel_initializer='glorot_uniform',
       ) for i in range(4)
     ] + [
       layers.BatchNormalization(),
-      layers.LeakyReLU()
+      #layers.LeakyReLU()
     ]
 
     residual_conv_7 = layers.Conv2DTranspose(      
@@ -182,8 +187,7 @@ def build_backbone(input_shape=(224, 224, 3)):
       padding='same',
       activation=None,
       name=f'block7_residual_conv',
-      kernel_initializer='he_normal',
-      bias_initializer='zeros'
+      kernel_initializer='glorot_uniform'
     )
     adder_7 = layers.Add()
 
@@ -194,14 +198,13 @@ def build_backbone(input_shape=(224, 224, 3)):
         kernel_size=(3, 3), 
         strides=(1, 1), 
         padding='same',
-        activation=None,
+        activation='relu',
         name=f'block8_conv{i+1}',
-        kernel_initializer='he_normal',
-        bias_initializer='zeros'
+        kernel_initializer='glorot_uniform'
       ) for i in range(4)
     ] + [
       layers.BatchNormalization(),
-      layers.LeakyReLU()
+      #layers.LeakyReLU()
     ]
 
     residual_conv_8 = layers.Conv2DTranspose(      
@@ -211,8 +214,7 @@ def build_backbone(input_shape=(224, 224, 3)):
       padding='same',
       activation=None,
       name=f'block8_residual_conv',
-      kernel_initializer='he_normal',
-      bias_initializer='zeros'
+      kernel_initializer='glorot_uniform',
     )
     adder_8 = layers.Add()
 
@@ -223,10 +225,9 @@ def build_backbone(input_shape=(224, 224, 3)):
         kernel_size=(3, 3), 
         strides=(1, 1), 
         padding='same',
-        activation=None,
+        activation='relu',
         name=f'block9_conv{i+1}',
-        kernel_initializer='he_normal',
-        bias_initializer='zeros'         
+        kernel_initializer='glorot_uniform'        
       ) for i in range(2)
     ] + [
       layers.BatchNormalization(),
@@ -250,12 +251,13 @@ def build_backbone(input_shape=(224, 224, 3)):
         kernel_size=(3, 3), 
         strides=(1, 1), 
         padding='same',
-        activation=None,
-        name=f'block10_conv{i+1}' 
+        activation='relu',
+        name=f'block10_conv{i+1}',
+        kernel_initializer='glorot_uniform',
       ) for i in range(2)
     ] + [
       layers.BatchNormalization(),
-      layers.LeakyReLU()
+      #layers.LeakyReLU()
     ]
 
     residual_conv_10 = layers.Conv2DTranspose(      
@@ -264,6 +266,7 @@ def build_backbone(input_shape=(224, 224, 3)):
       strides=(1, 1), 
       padding='same',
       activation=None,
+      kernel_initializer='glorot_uniform',
       name=f'block10_residual_conv'
     )
     adder_10 = layers.Add()
