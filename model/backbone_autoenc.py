@@ -10,7 +10,7 @@ def build_backbone(input_shape=(224, 224, 3)):
         strides=(1, 1), 
         padding='same',
         activation='relu',
-        kernel_initializer='glorot_uniform'
+        kernel_initializer='glorot_uniform',
         name=f'block1_conv{i+1}' 
       ) for i in range(2)
     ] + [
