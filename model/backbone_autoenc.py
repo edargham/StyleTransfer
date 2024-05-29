@@ -24,7 +24,7 @@ def build_backbone(input_shape=(224, 224, 3)):
       strides=(1, 1), 
       padding='same',
       activation=None,
-      kernel_initializer='glorot_uniform'
+      kernel_initializer='glorot_uniform',
       name=f'block1_residual_conv'
     )
     adder_1 = layers.Add()
@@ -37,7 +37,7 @@ def build_backbone(input_shape=(224, 224, 3)):
         strides=(1, 1), 
         padding='same',
         activation='relu',
-        kernel_initializer='glorot_uniform'
+        kernel_initializer='glorot_uniform',
         name=f'block2_conv{i+1}' 
       ) for i in range(2)
     ] + [
@@ -51,7 +51,7 @@ def build_backbone(input_shape=(224, 224, 3)):
       strides=(1, 1), 
       padding='same',
       activation=None,
-      kernel_initializer='glorot_uniform'
+      kernel_initializer='glorot_uniform',
       name=f'block2_residual_conv'
     )
     adder_2 = layers.Add()
@@ -64,7 +64,7 @@ def build_backbone(input_shape=(224, 224, 3)):
         strides=(1, 1), 
         padding='same',
         activation='relu',
-        kernel_initializer='glorot_uniform'
+        kernel_initializer='glorot_uniform',
         name=f'block3_conv{i+1}' 
       ) for i in range(4)
     ] + [
@@ -105,7 +105,7 @@ def build_backbone(input_shape=(224, 224, 3)):
       padding='same',
       activation=None,
       name=f'block4_residual_conv',
-      kernel_initializer='glorot_uniform'
+      kernel_initializer='glorot_uniform',
     )
     adder_4 = layers.Add()
     max_pool_4 = layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2))
@@ -132,7 +132,7 @@ def build_backbone(input_shape=(224, 224, 3)):
       padding='same',
       activation=None,
       name=f'block5_residual_conv',
-      kernel_initializer='glorot_uniform'
+      kernel_initializer='glorot_uniform',
     )
     adder_5 = layers.Add()
     max_pool_5 = layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2))
@@ -187,7 +187,7 @@ def build_backbone(input_shape=(224, 224, 3)):
       padding='same',
       activation=None,
       name=f'block7_residual_conv',
-      kernel_initializer='glorot_uniform'
+      kernel_initializer='glorot_uniform',
     )
     adder_7 = layers.Add()
 
@@ -200,7 +200,7 @@ def build_backbone(input_shape=(224, 224, 3)):
         padding='same',
         activation='relu',
         name=f'block8_conv{i+1}',
-        kernel_initializer='glorot_uniform'
+        kernel_initializer='glorot_uniform',
       ) for i in range(4)
     ] + [
       layers.BatchNormalization(),
@@ -227,7 +227,7 @@ def build_backbone(input_shape=(224, 224, 3)):
         padding='same',
         activation='relu',
         name=f'block9_conv{i+1}',
-        kernel_initializer='glorot_uniform'        
+        kernel_initializer='glorot_uniform',    
       ) for i in range(2)
     ] + [
       layers.BatchNormalization(),
