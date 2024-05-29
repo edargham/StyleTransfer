@@ -10,7 +10,7 @@ from losses.style_content_loss import StyleContentLoss
 from model.backbone_autoenc import build_backbone
 
 if __name__ == '__main__':
-  vgg = build_backbone(num_classes=100)
+  vgg = build_backbone()
   # keep only the layers upto max_pooling2d_4
   vgg.load_weights('best_backbone.h5')
   vgg = keras.Model(inputs=vgg.input, outputs=vgg.get_layer('max_pooling2d_4').output)
